@@ -1,21 +1,43 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace AF_Augmentation
 {
-    internal static class Controller
+    public static class Controller
     {
-        private static string source = "..\\..\\..\\Source";
+        private static string sourceBase;
+        private static string sourceAmbient;
+        private static string resultDirectory;
         static List<string> basePaths = new List<string>();
         static List<string> ambientPaths = new List<string>();
 
         static Controller()
         {
-            basePaths = Directory.GetFiles(source + "\\Base").ToList();
-            ambientPaths = Directory.GetFiles(source + "\\Ambient").ToList();
+            var source = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\..\\..\\..\\Source");
+            sourceBase = source + "\\Base";
+            sourceAmbient = source + "\\Ambient";
+            resultDirectory = source + "\\Result\\";
+            basePaths = Directory.GetFiles(sourceBase).ToList();
+            ambientPaths = Directory.GetFiles(sourceAmbient).ToList();
+        }
+
+        public static void SetBaseFolder()
+        {
+
+        }
+
+        public static void SetAmbientFolder()
+        {
+
+        }
+
+        public static void SetResultFolder()
+        {
+
         }
 
         public static void Mix()
@@ -34,7 +56,8 @@ namespace AF_Augmentation
 
         private static string ExtractResultPath(string firstFile, string secondFile)
         {
-            return source + "\\Result\\" + firstFile.Substring(20, firstFile.Length - 24) + '_' + secondFile.Substring(24, secondFile.Length - 28) + ".wav";
+            return resultDirectory + firstFile.Substring(sourceBase.Length + 1, firstFile.Length - sourceBase.Length - 5) +
+                '_' + secondFile.Substring(sourceAmbient.Length + 1, secondFile.Length - sourceAmbient.Length - 5) + ".wav";
         }
     }
 }
