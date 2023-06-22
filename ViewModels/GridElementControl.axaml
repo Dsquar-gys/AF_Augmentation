@@ -1,0 +1,25 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AF_Augmentation.ViewModels">
+  <Design.PreviewWith>
+	  <StackPanel>  
+        <controls:GridElementControl />
+	  </StackPanel>
+  </Design.PreviewWith>
+
+  <Style Selector="controls|GridElementControl">
+    <!-- Set Defaults -->
+	<Setter Property="Foreground" Value="White"></Setter>
+	<Setter Property="Background" Value="{DynamicResource ResourceKey=DarkGrayBrush}"></Setter>
+	  
+    <Setter Property="Template">
+      <ControlTemplate>
+		  <Border Background="{TemplateBinding Background}" Padding="10,5" Margin="10,3" CornerRadius="20">
+			  <StackPanel>
+				  <Label Content="{TemplateBinding FileName}" />
+			  </StackPanel>
+		  </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

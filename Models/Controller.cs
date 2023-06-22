@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Avalonia.Controls;
+using AF_Augmentation.ViewModels;
 
-namespace AF_Augmentation
+namespace AF_Augmentation.Models
 {
     public static class Controller
     {
@@ -25,19 +27,27 @@ namespace AF_Augmentation
             ambientPaths = Directory.GetFiles(sourceAmbient).ToList();
         }
 
-        public static void SetBaseFolder()
+        public static List<string> SetBaseFolder()
         {
-
+            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
+            if (result is not null)
+                sourceBase = result;
+            basePaths = Directory.GetFiles(sourceBase).ToList();
+            return basePaths;
         }
 
-        public static void SetAmbientFolder()
+        public static List<string> SetAmbientFolder()
         {
-
+            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
+            if (result is not null)
+                sourceAmbient = result;
+            ambientPaths = Directory.GetFiles(sourceAmbient).ToList();
+            return ambientPaths;
         }
 
         public static void SetResultFolder()
         {
-
+            throw new NotImplementedException();
         }
 
         public static void Mix()
