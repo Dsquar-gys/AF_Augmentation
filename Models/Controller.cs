@@ -32,7 +32,7 @@ namespace AF_Augmentation.Models
             string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
             if (result is not null)
                 sourceBase = result;
-            basePaths = Directory.GetFiles(sourceBase).ToList();
+            basePaths = Directory.GetFiles(sourceBase, "*.wav").ToList();
             return basePaths;
         }
 
@@ -41,7 +41,7 @@ namespace AF_Augmentation.Models
             string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
             if (result is not null)
                 sourceAmbient = result;
-            ambientPaths = Directory.GetFiles(sourceAmbient).ToList();
+            ambientPaths = Directory.GetFiles(sourceAmbient, "*.wav").ToList();
             return ambientPaths;
         }
 

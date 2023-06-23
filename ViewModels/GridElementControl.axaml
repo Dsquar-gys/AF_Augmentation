@@ -14,7 +14,7 @@
 	  
     <Setter Property="Template">
       <ControlTemplate>
-		  <Border Background="{TemplateBinding Background}" Padding="10,5" Margin="10,3" CornerRadius="20">
+		  <Border Background="{TemplateBinding Background}" Padding="10,2" Margin="10,2" CornerRadius="20">
 			  <StackPanel>
 				  <Label Content="{TemplateBinding FileName}" />
 			  </StackPanel>

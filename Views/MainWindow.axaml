@@ -33,21 +33,19 @@
 			</Grid.Styles>
 
 			<!-- Base Grid -->
-			<Grid Grid.Column="0" Margin="10" RowDefinitions="Auto, *" Name="BasePanel">
+			<Grid Grid.Column="0" Margin="10" RowDefinitions="Auto, *">
 				<Button Grid.Row="0" HorizontalAlignment="Center" Command="{Binding SelectBaseFolder}">Select Base Folder</Button>
-				<Border Grid.Row="1" Margin="0,10,0,0" CornerRadius="20" Background="{DynamicResource MidBlueBrush}">	
-					<StackPanel >
-						<controls:GridElementControl FileName="Birds.wav"></controls:GridElementControl>
+				<Border Grid.Row="1" CornerRadius="20" Margin="0,10,0,0" Background="{DynamicResource MidBlueBrush}">
+					<StackPanel  Name="BaseStackPanel">
 						<controls:GridElementControl></controls:GridElementControl>
 					</StackPanel>
-				</Border>
+				</Border>	
 			</Grid>
 			<!-- Ambient Grid -->
 			<Grid Grid.Column="1"  Margin="10" RowDefinitions="Auto, *" Name="AmbientPanel">
 				<Button Grid.Row="0" HorizontalAlignment="Center" Command="{Binding SelectAmbientFolder}">Select Ambient Folder</Button>
-				<Border Grid.Row="1" Margin="0,10,0,0" CornerRadius="20" Background="{DynamicResource MidBlueBrush}">
-					<StackPanel >
-						<controls:GridElementControl FileName="Birds.wav"></controls:GridElementControl>
+				<Border Grid.Row="1" CornerRadius="20" Margin="0,10,0,0" Background="{DynamicResource MidBlueBrush}">
+					<StackPanel Name="AmbientStackPanel">
 						<controls:GridElementControl></controls:GridElementControl>
 					</StackPanel>
 				</Border>
@@ -72,7 +70,7 @@
 		<Grid Grid.Row="2" Background="#48577D" Height="40" ColumnDefinitions="Auto, *, Auto">
 			<Button Grid.Column="0" Foreground="White">Change Result Folder</Button>
 			<Rectangle Grid.Column="1" Fill="#7690CF" Margin="10,0,10,0"></Rectangle>
-			<Button Grid.Column="2" Foreground="White" Padding="10,0,20,0">Apply</Button>
+			<Button Grid.Column="2" Foreground="White" Padding="10,0,20,0" IsEnabled="False">Apply</Button>
 		</Grid>
 	</Grid>
 </Window>

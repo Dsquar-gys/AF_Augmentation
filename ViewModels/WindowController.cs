@@ -12,11 +12,13 @@ namespace AF_Augmentation.ViewModels
         public void SelectBaseFolder()
         {
             BaseFiles = Controller.SetBaseFolder();
+            MainWindow.Instance.UpdateBaseStack(BaseFiles);
         }
 
         public void SelectAmbientFolder()
         {
             AmbientFiles = Controller.SetAmbientFolder();
+            MainWindow.Instance?.UpdateAmbientStack(AmbientFiles);
         }
     }
 }
