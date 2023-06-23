@@ -68,9 +68,9 @@
 		
 		<!-- Bottom bar -->
 		<Grid Grid.Row="2" Background="#48577D" Height="40" ColumnDefinitions="Auto, *, Auto">
-			<Button Grid.Column="0" Foreground="White">Change Result Folder</Button>
-			<Rectangle Grid.Column="1" Fill="#7690CF" Margin="10,0,10,0"></Rectangle>
-			<Button Grid.Column="2" Foreground="White" Padding="10,0,20,0" IsEnabled="False">Apply</Button>
+			<Button Grid.Column="0" Foreground="White" Command="{Binding SelectResultFolder}">Change Result Folder</Button>
+			<controls:GridElementControl Grid.Column="1" Name="ResultFolderPath" Margin="10,4"></controls:GridElementControl>
+			<Button Grid.Column="2" Name="ApplyButton" Command="{Binding RunApplication}" Foreground="White" Padding="10,0,20,0" IsEnabled="False">Apply</Button>
 		</Grid>
 	</Grid>
 </Window>

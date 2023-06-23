@@ -27,5 +27,11 @@ namespace AF_Augmentation
             foreach (string name in names)
                 AmbientStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
         }
+
+        public void UpdateResultPath(string path)
+        {
+            ResultFolderPath.FileName = path;
+            ApplyButton.IsEnabled = true;
+        }
     }
 }

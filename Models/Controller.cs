@@ -45,9 +45,12 @@ namespace AF_Augmentation.Models
             return ambientPaths;
         }
 
-        public static void SetResultFolder()
+        public static string SetResultFolder()
         {
-            throw new NotImplementedException();
+            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
+            if (result is not null)
+                resultDirectory = result + '\\';
+            return resultDirectory;
         }
 
         public static void Mix()

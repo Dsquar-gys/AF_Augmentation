@@ -8,6 +8,7 @@ namespace AF_Augmentation.ViewModels
     {
         public List<string> BaseFiles { get; set; }
         public List<string> AmbientFiles { get; set; }
+        public string ResultPath { get; set; }
 
         public void SelectBaseFolder()
         {
@@ -18,7 +19,15 @@ namespace AF_Augmentation.ViewModels
         public void SelectAmbientFolder()
         {
             AmbientFiles = Controller.SetAmbientFolder();
-            MainWindow.Instance?.UpdateAmbientStack(AmbientFiles);
+            MainWindow.Instance.UpdateAmbientStack(AmbientFiles);
         }
+
+        public void SelectResultFolder()
+        {
+            ResultPath = Controller.SetResultFolder();
+            MainWindow.Instance.UpdateResultPath(ResultPath);
+        }
+
+        public void RunApplication() => Controller.Mix();
     }
 }

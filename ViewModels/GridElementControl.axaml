@@ -16,7 +16,7 @@
       <ControlTemplate>
 		  <Border Background="{TemplateBinding Background}" Padding="10,2" Margin="10,2" CornerRadius="20">
 			  <StackPanel>
-				  <Label Content="{TemplateBinding FileName}" />
+				  <Label Content="{TemplateBinding FileName}" VerticalAlignment="Center" />
 			  </StackPanel>
 		  </Border>
       </ControlTemplate>
