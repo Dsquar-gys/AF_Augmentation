@@ -1,11 +1,11 @@
-﻿using NAudio.Wave;
+﻿using Avalonia.Controls;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Avalonia.Controls;
-using AF_Augmentation.ViewModels;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AF_Augmentation.Models
 {
@@ -14,25 +14,15 @@ namespace AF_Augmentation.Models
         private static string sourceBase;
         private static string sourceAmbient;
         private static string resultDirectory;
-        static List<string> basePaths = new List<string>();
-        static List<string> ambientPaths = new List<string>();
-
-        static Controller()
-        {
-            var source = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\..\\..\\..\\Source");
-            sourceBase = source + "\\Base";
-            sourceAmbient = source + "\\Ambient";
-            resultDirectory = source + "\\Result\\";
-            basePaths = Directory.GetFiles(sourceBase).ToList();
-            ambientPaths = Directory.GetFiles(sourceAmbient).ToList();
-        }
+        static List<string> basePaths;
+        static List<string> ambientPaths;
 
         public static List<string> SetBaseFolder()
         {
             string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
             if (result is not null)
                 sourceBase = result;
-            basePaths = Directory.GetFiles(sourceBase, "*.wav").ToList();
+            basePaths = Directory.EnumerateFiles(sourceBase, "*.wav").ToList();
             return basePaths;
         }
 
@@ -53,8 +43,19 @@ namespace AF_Augmentation.Models
             return resultDirectory;
         }
 
+        #region Async Setters
+
+        public static async Task<List<string>> SetBaseFolderAsync() =>
+            await Task.Run(() => SetBaseFolder());
+
+        public static async Task<List<string>> SetAmbientFolderAsync() =>
+            await Task.Run(() => SetAmbientFolder());
+
+        #endregion
+
         public static void Mix()
         {
+            ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, 10);
             foreach (var baseAudioPath in basePaths)
                 foreach (var ambientAudioPath in ambientPaths)
                 {
@@ -65,7 +66,10 @@ namespace AF_Augmentation.Models
                         WaveFileWriter.CreateWaveFile16(ExtractResultPath(reader1.FileName, reader2.FileName), mixer);
                     }
                 }
+            ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, ThreadPool.ThreadCount);
         }
+
+        public static async Task MixAsync() => await Task.Run(() => Mix());
 
         private static string ExtractResultPath(string firstFile, string secondFile)
         {

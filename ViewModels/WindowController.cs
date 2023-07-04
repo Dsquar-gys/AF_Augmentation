@@ -1,6 +1,7 @@
 ﻿using AF_Augmentation.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AF_Augmentation.ViewModels
 {
@@ -10,15 +11,15 @@ namespace AF_Augmentation.ViewModels
         public List<string> AmbientFiles { get; set; }
         public string ResultPath { get; set; }
 
-        public void SelectBaseFolder()
+        public async Task SelectBaseFolderAsync()
         {
-            BaseFiles = Controller.SetBaseFolder();
+            BaseFiles = await Controller.SetBaseFolderAsync();
             MainWindow.Instance.UpdateBaseStack(BaseFiles);
         }
 
-        public void SelectAmbientFolder()
+        public async Task SelectAmbientFolderAsync()
         {
-            AmbientFiles = Controller.SetAmbientFolder();
+            AmbientFiles = await Controller.SetAmbientFolderAsync();
             MainWindow.Instance.UpdateAmbientStack(AmbientFiles);
         }
 
@@ -28,6 +29,6 @@ namespace AF_Augmentation.ViewModels
             MainWindow.Instance.UpdateResultPath(ResultPath);
         }
 
-        public void RunApplication() => Controller.Mix();
+        public async Task RunApplicationAsync() => await Controller.MixAsync();
     }
 }
