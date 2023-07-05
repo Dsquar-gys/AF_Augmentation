@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
+using OptionsHandler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +16,15 @@ namespace AF_Augmentation.Models
         private static string resultDirectory;
         static List<string> basePaths;
         static List<string> ambientPaths;
+
+        public static EffectStream effectBase { get; }
+        public static EffectStream effectAmbient { get; }
+
+        static Controller()
+        {
+            effectBase = new EffectStream();
+            effectAmbient = new EffectStream();
+        }
 
         public static List<string> SetBaseFolder()
         {
@@ -56,14 +65,29 @@ namespace AF_Augmentation.Models
         public static void Mix()
         {
             ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, 10);
+
             foreach (var baseAudioPath in basePaths)
                 foreach (var ambientAudioPath in ambientPaths)
                 {
-                    using (var reader1 = new AudioFileReader(baseAudioPath))
-                    using (var reader2 = new AudioFileReader(ambientAudioPath))
+                    using (var reader1 = new WaveFileReader(baseAudioPath))
+                    using (var reader2 = new WaveFileReader(ambientAudioPath))
                     {
-                        var mixer = new MixingSampleProvider(new[] { reader1, reader2 });
-                        WaveFileWriter.CreateWaveFile16(ExtractResultPath(reader1.FileName, reader2.FileName), mixer);
+                        effectBase.SourceStream = reader1;
+                        effectAmbient.SourceStream = reader2;
+
+                        BlockAlignReductionStream processedBase = new BlockAlignReductionStream(effectBase);
+                        BlockAlignReductionStream processedAmbient = new BlockAlignReductionStream(effectAmbient);
+
+                        //effectAmbient.ClearEffects();
+                        //effectAmbient.Register(new Echo(20000, 0.5f, 5));
+                        //effectAmbient.Register(new VolumeMultiply(0.1f));
+                        //effectAmbient.Register(new Echo(10000, 0.8f, 10));
+
+                        // Mixing
+                        var mixer = new MixingWaveProvider32(new[] { processedBase, processedAmbient });
+
+                        // Output
+                        WaveFileWriter.CreateWaveFile(ExtractResultPath(baseAudioPath, ambientAudioPath), mixer);
                     }
                 }
             ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, ThreadPool.ThreadCount);
@@ -75,6 +99,18 @@ namespace AF_Augmentation.Models
         {
             return resultDirectory + firstFile.Substring(sourceBase.Length + 1, firstFile.Length - sourceBase.Length - 5) +
                 '_' + secondFile.Substring(sourceAmbient.Length + 1, secondFile.Length - sourceAmbient.Length - 5) + ".wav";
+        }
+
+        public static void ChangeWaveFormat(string path)
+        {
+            using (var reader = new WaveFileReader(path))
+            {
+                var outFormat = WaveFormat.CreateIeeeFloatWaveFormat(44100, reader.WaveFormat.Channels);
+                using (var resampler = new MediaFoundationResampler(reader, outFormat))
+                {
+                    WaveFileWriter.CreateWaveFile("test.wav", resampler);
+                }
+            }
         }
     }
 }
