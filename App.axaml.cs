@@ -12,7 +12,6 @@ namespace AF_Augmentation
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            //Controller.Mix();
         }
 
         public override void OnFrameworkInitializationCompleted()

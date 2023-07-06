@@ -4,11 +4,12 @@
 
     <Application.Styles>
         <FluentTheme Mode="Light"/>
-		<StyleInclude Source="/ViewModels/GridElementControl.axaml"></StyleInclude>
+		<StyleInclude Source="/Controls/GridElementControl.axaml"></StyleInclude>
+		<StyleInclude Source="/Controls/OptionsElementControl.axaml"></StyleInclude>
     </Application.Styles>
-
+	
 	<Application.Resources>
-
+		
 		<SolidColorBrush x:Key="DarkBlueBrush">#48577D</SolidColorBrush>
 		<SolidColorBrush x:Key="MidBlueBrush">#7690CF</SolidColorBrush>
 		<SolidColorBrush x:Key="LightBlueBrush">#D3DCF2</SolidColorBrush>

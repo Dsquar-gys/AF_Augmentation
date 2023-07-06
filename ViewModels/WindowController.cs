@@ -1,6 +1,6 @@
-﻿using AF_Augmentation.Models;
+﻿using AF_Augmentation.Controls;
+using AF_Augmentation.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using OptionsHandler;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,6 +29,10 @@ namespace AF_Augmentation.ViewModels
             ResultPath = Controller.SetResultFolder();
             MainWindow.Instance.UpdateResultPath(ResultPath);
         }
+
+        public void AddOption() => MainWindow.Instance.AddOption();
+        public void DeleteOption(int index) => MainWindow.Instance.DeleteOption(index);
+        public void CommitChange(OptionsElementControl control) => control.Active = !control.Active;
 
         public async Task RunApplicationAsync() => await Controller.MixAsync();
     }

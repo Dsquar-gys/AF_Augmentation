@@ -1,6 +1,7 @@
-using AF_Augmentation.ViewModels;
+using AF_Augmentation.Controls;
 using Avalonia.Controls;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AF_Augmentation
 {
@@ -32,6 +33,22 @@ namespace AF_Augmentation
         {
             ResultFolderPath.FileName = path;
             ApplyButton.IsEnabled = true;
+        }
+
+        public void AddOption() => OptionsStackPanel.Children.Add(new OptionsElementControl());
+        public void DeleteOption(int index)
+        {
+            var controls = MainWindow.Instance.OptionsStackPanel.Children;
+            controls.RemoveAt(index);
+
+            OptionsElementControl reference;
+
+            // Updating indexes of the rest controls
+            for (int i = 0; i < controls.Count; i++)
+            {
+                reference = controls[i] as OptionsElementControl;
+                reference.Index = i;
+            }
         }
     }
 }
