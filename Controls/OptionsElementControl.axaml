@@ -17,8 +17,9 @@
 					<Border Background="{TemplateBinding Background}" Padding="10,2" Margin="10,2" CornerRadius="20">
 						<Grid RowDefinitions="Auto, Auto, Auto">
 							<Grid Grid.Row="0" ColumnDefinitions="*,auto">
-								<ComboBox HorizontalAlignment="Center" Grid.Column="0" IsEnabled="{TemplateBinding Active}">
-									<ComboBoxItem>Volume Change</ComboBoxItem>
+								<ComboBox HorizontalAlignment="Center" Grid.Column="0" IsEnabled="{TemplateBinding Active}" SelectedIndex="0" Name="EffectSelector">
+									<ComboBoxItem>Volume Up</ComboBoxItem>
+									<ComboBoxItem>Volume Down</ComboBoxItem>
 									<ComboBoxItem>Echo</ComboBoxItem>
 								</ComboBox>
 								<Button Grid.Column="1" Background="#CD5C5C" CornerRadius="15" IsEnabled="{TemplateBinding Active}" Command="{Binding DeleteOption}" CommandParameter="{TemplateBinding Index}">
@@ -26,8 +27,8 @@
 								</Button>
 							</Grid>
 							<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-								<RadioButton Foreground="White" Margin="5,0" IsEnabled="{TemplateBinding Active}" IsChecked="{TemplateBinding BaseToggle}">Base</RadioButton>
-								<RadioButton Foreground="White" Margin="5,0" IsEnabled="{TemplateBinding Active}" IsChecked="{TemplateBinding AmbientToggle}">Ambient</RadioButton>
+								<RadioButton Foreground="White" Margin="5,0" IsEnabled="{TemplateBinding Active}" IsChecked="{TemplateBinding BaseToggle}" Command="{Binding SwitchRadio}" CommandParameter="{TemplateBinding Instance}">Base</RadioButton>
+								<RadioButton Foreground="White" Margin="5,0" IsEnabled="{TemplateBinding Active}" IsChecked="{TemplateBinding AmbientToggle}" Command="{Binding SwitchRadio}" CommandParameter="{TemplateBinding Instance}">Ambient</RadioButton>
 							</StackPanel>
 							<CheckBox Grid.Row="2" HorizontalAlignment="Center" Foreground="White" Command="{Binding CommitChange}" CommandParameter="{TemplateBinding Instance}">Commited</CheckBox>
 						</Grid>

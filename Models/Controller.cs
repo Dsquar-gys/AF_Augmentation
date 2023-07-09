@@ -52,6 +52,7 @@ namespace AF_Augmentation.Models
             return resultDirectory;
         }
 
+        //
         #region Async Setters
 
         public static async Task<List<string>> SetBaseFolderAsync() =>
