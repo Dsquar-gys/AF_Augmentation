@@ -16,7 +16,7 @@
 		</Grid>
 		
 		<!-- Main area -->
-		<Grid Grid.Row="1" Background="#D3DCF2" ColumnDefinitions="5*, 5*, 4*">
+		<Grid Grid.Row="1" Background="#D3DCF2" ColumnDefinitions="*, *, *">
 
 			<Grid.Styles>
 				<Style Selector="Button.large">
@@ -34,43 +34,83 @@
 
 			<!-- Base Grid -->
 			<Grid Grid.Column="0" Margin="10" RowDefinitions="Auto, *">
-				<Button Classes="large" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding SelectBaseFolderAsync}">Select Base Folder</Button>
-				<Border Grid.Row="1" CornerRadius="20" Margin="0,10,0,0" Background="{DynamicResource MidBlueBrush}">
-					<StackPanel  Name="BaseStackPanel">
-						<controls:GridElementControl></controls:GridElementControl>
-					</StackPanel>
+				<Button Classes="large" Grid.Row="0" HorizontalAlignment="Center"
+						Command="{Binding SelectBaseFolderAsync}">Select Base Folder</Button>
+				<Border Grid.Row="1" CornerRadius="20" Margin="0,10,0,0"
+						Background="{DynamicResource MidBlueBrush}">
+					<ScrollViewer>
+						<StackPanel  Name="BaseStackPanel" Margin="10">
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+						</StackPanel>
+					</ScrollViewer>
 				</Border>	
 			</Grid>
 			<!-- Ambient Grid -->
-			<Grid Grid.Column="1"  Margin="10" RowDefinitions="Auto, *" Name="AmbientPanel">
-				<Button Classes="large" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding SelectAmbientFolderAsync}">Select Ambient Folder</Button>
-				<Border Grid.Row="1" CornerRadius="20" Margin="0,10,0,0" Background="{DynamicResource MidBlueBrush}">
-					<StackPanel Name="AmbientStackPanel">
-						<controls:GridElementControl></controls:GridElementControl>
-					</StackPanel>
+			<Grid Grid.Column="1"  Margin="10" RowDefinitions="Auto, *"
+				  Name="AmbientPanel">
+				<Button Classes="large" Grid.Row="0" HorizontalAlignment="Center"
+						Command="{Binding SelectAmbientFolderAsync}">Select Ambient Folder</Button>
+				<Border Grid.Row="1" CornerRadius="20" Margin="0,10,0,0"
+						Background="{DynamicResource MidBlueBrush}">
+					<ScrollViewer>
+						<StackPanel Name="AmbientStackPanel" Margin="10">
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+							<controls:GridElementControl></controls:GridElementControl>
+						</StackPanel>
+					</ScrollViewer>
 				</Border>
 			</Grid>
 			<!-- Options Row -->
-			<Grid Grid.Column="2" Margin="10" RowDefinitions="Auto, Auto, *">
+			<Grid Grid.Column="2" Margin="10" RowDefinitions="Auto, *">
 				
 				<!-- Add Button -->
 				<Button Classes="large" Grid.Row="0" Command="{Binding AddOption}">Add Options</Button>
-				
 
 				<!-- Options Grid -->
-				<Border Classes="OptGrid" Grid.Row="2" Background="#9197A6" CornerRadius="20" Margin="0,10,0,0">
-					<StackPanel Name="OptionsStackPanel">
-						
-					</StackPanel>
+				<Border Classes="OptGrid" Grid.Row="1" Background="#9197A6"
+						CornerRadius="20" Margin="0,10,0,0">
+					<ScrollViewer>
+						<StackPanel Name="OptionsStackPanel" Margin="10">
+
+						</StackPanel>
+					</ScrollViewer>
+					
 				</Border>
 			</Grid>
 		</Grid>
 		
 		<!-- Bottom bar -->
 		<Grid Grid.Row="2" Background="#48577D" Height="40" ColumnDefinitions="Auto, *, Auto">
-			<Button Grid.Column="0" Foreground="White" Command="{Binding SelectResultFolder}">Change Result Folder</Button>
+			<Button Grid.Column="0" Foreground="White"
+					Command="{Binding SelectResultFolder}">Change Result Folder</Button>
 			<controls:GridElementControl Grid.Column="1" Name="ResultFolderPath" Margin="10,4"></controls:GridElementControl>
-			<Button Grid.Column="2" Name="ApplyButton" Command="{Binding RunApplicationAsync}" Foreground="White" Padding="10,0,20,0" IsEnabled="False">Apply</Button>
+			<Button Grid.Column="2" Name="ApplyButton"
+					Command="{Binding RunApplicationAsync}"
+					Foreground="White" Padding="10,0,20,0"
+					IsEnabled="False">Apply</Button>
 		</Grid>
 	</Grid>
 </Window>

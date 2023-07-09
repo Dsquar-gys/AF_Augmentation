@@ -1,4 +1,5 @@
 using AF_Augmentation.Controls;
+using AF_Augmentation.Models;
 using Avalonia.Controls;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,19 +22,14 @@ namespace AF_Augmentation
             foreach (string name in names)
                 BaseStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
         }
-
         public void UpdateAmbientStack(List<string> names)
         {
             AmbientStackPanel.Children.Clear();
             foreach (string name in names)
                 AmbientStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
         }
-
-        public void UpdateResultPath(string path)
-        {
-            ResultFolderPath.FileName = path;
-            ApplyButton.IsEnabled = true;
-        }
+        public void UpdateResultPath(string path) => ResultFolderPath.FileName = path;
+        public void UpdateApplyButtonActivity(bool applyActivity) => ApplyButton.IsEnabled = applyActivity;
 
         public void AddOption() => OptionsStackPanel.Children.Add(new OptionsElementControl());
         public void DeleteOption(int index)

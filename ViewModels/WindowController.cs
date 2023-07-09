@@ -19,18 +19,30 @@ namespace AF_Augmentation.ViewModels
         {
             BaseFiles = await Controller.SetBaseFolderAsync();
             MainWindow.Instance.UpdateBaseStack(BaseFiles);
+            UpdateApplyButtonActivity();
         }
 
         public async Task SelectAmbientFolderAsync()
         {
             AmbientFiles = await Controller.SetAmbientFolderAsync();
             MainWindow.Instance.UpdateAmbientStack(AmbientFiles);
+            UpdateApplyButtonActivity();
         }
 
         public void SelectResultFolder()
         {
             ResultPath = Controller.SetResultFolder();
             MainWindow.Instance.UpdateResultPath(ResultPath);
+            UpdateApplyButtonActivity();
+        }
+
+        private void UpdateApplyButtonActivity()
+        {
+            bool applyActivate = BaseFiles is null || AmbientFiles is null ||
+                                 ResultPath is null || BaseFiles.Count == 0 ||
+                                 AmbientFiles.Count == 0 || ResultPath == "" ?
+                                 false : true;
+            MainWindow.Instance.UpdateApplyButtonActivity(applyActivate);
         }
 
         public void AddOption() => MainWindow.Instance.AddOption();
