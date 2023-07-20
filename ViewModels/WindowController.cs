@@ -2,72 +2,82 @@
 using AF_Augmentation.Models;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using OptionsHandler;
-using OptionsHandler.Effects;
+using AudioEffects;
+using AudioEffects.Effects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace AF_Augmentation.ViewModels
 {
-    public class WindowController : ObservableObject
+    public class EffectViewModel : ViewModelBase
+    {
+
+    }
+
+    public class EffectViewModel1 : EffectViewModel
+    {
+
+    }
+
+    public partial class WindowController : ObservableObject
     {
         public List<string> BaseFiles { get; set; }
         public List<string> AmbientFiles { get; set; }
-        public string ResultPath { get; set; }
 
-        public async Task SelectBaseFolderAsync()
+        public ObservableCollection<EffectViewModel> ListOfEffects { get; } = new();
+
+        [ObservableProperty]
+        private string resultPath = "";
+
+        public WindowController()
+        {
+            ListOfEffects.Add(new EffectViewModel1() );
+        }
+
+        #region Relay Commands
+
+        [RelayCommand]
+        private async Task SelectBaseFolderAsync()
         {
             BaseFiles = await Controller.SetBaseFolderAsync();
             MainWindow.Instance.UpdateBaseStack(BaseFiles);
+            MainWindow.Instance.Logger.Invoke("Base folder selected...");
             UpdateApplyButtonActivity();
         }
-
-        public async Task SelectAmbientFolderAsync()
+        [RelayCommand]
+        private async Task SelectAmbientFolderAsync()
         {
             AmbientFiles = await Controller.SetAmbientFolderAsync();
             MainWindow.Instance.UpdateAmbientStack(AmbientFiles);
+            MainWindow.Instance.Logger.Invoke("Ambient folder selected...");
             UpdateApplyButtonActivity();
         }
-
-        public void SelectResultFolder()
+        [RelayCommand]
+        private void SelectResultFolder()
         {
             ResultPath = Controller.SetResultFolder();
-            MainWindow.Instance.UpdateResultPath(ResultPath);
+            MainWindow.Instance.Logger.Invoke("Result folder selected...");
             UpdateApplyButtonActivity();
         }
-
-        private void UpdateApplyButtonActivity()
+        [RelayCommand]
+        private void AddOption(string controlType)
         {
-            bool applyActivate = BaseFiles is null || AmbientFiles is null ||
-                                 ResultPath is null || BaseFiles.Count == 0 ||
-                                 AmbientFiles.Count == 0 || ResultPath == "" ?
-                                 false : true;
-            MainWindow.Instance.UpdateApplyButtonActivity(applyActivate);
+            if (BaseOptionControl.ControlSelector.ContainsKey(controlType))
+                MainWindow.Instance.AddOption(BaseOptionControl.ControlSelector[controlType].Invoke());
         }
-
-        public void AddOption() => MainWindow.Instance.AddOption();
-        public void DeleteOption(int index) => MainWindow.Instance.DeleteOption(index);
-        public void SwitchRadio(OptionsElementControl control) => control.SwitchRadio();
-        public void CommitChange(OptionsElementControl control)
+        [RelayCommand]
+        private void DeleteOption(int index) => MainWindow.Instance.DeleteOption(index);
+        [RelayCommand]
+        private void SwitchRadio(BaseOptionControl control) => control.SwitchRadio();
+        [RelayCommand]
+        private void CommitChange(BaseOptionControl control)
         {
             control.Active = !control.Active;
 
-            IEffect command;
-            var s = control.EffectSelector.SelectedItem as ComboBoxItem;
-            switch (s.Content)
-            {
-                case "Volume Up":
-                    command = new VolumeMultiply(1.5f);
-                    break;
-                case "Volume Down":
-                    command = new VolumeMultiply(0.5f);
-                    break;
-                case "Echo":
-                    command = new Echo(20000, 0.5f, 5);
-                    break;
-                default: throw new System.Exception("WindowController_CommitChange_CommandError");
-
-            }
+            IEffect command = control.CreateEffect();
 
             if (!control.Active) // Register
             {
@@ -83,6 +93,24 @@ namespace AF_Augmentation.ViewModels
             }
         }
 
-        public async Task RunApplicationAsync() => await Controller.MixAsync();
+        #endregion
+
+        private void UpdateApplyButtonActivity()
+        {
+            bool applyActivate = BaseFiles is null || AmbientFiles is null ||
+                                 ResultPath is null || BaseFiles.Count == 0 ||
+                                 AmbientFiles.Count == 0 || ResultPath == "" ?
+                                 false : true;
+            MainWindow.Instance.UpdateApplyButtonActivity(applyActivate);
+        }
+
+        
+
+        public async Task RunApplicationAsync()
+        {
+            var tr = Thread.CurrentThread.ManagedThreadId;
+            await Controller.MixAsync();
+            MainWindow.Instance.Logger.Invoke("Mixing in progress...");
+        }
     }
 }

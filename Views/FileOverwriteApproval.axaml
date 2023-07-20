@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:AF_Augmentation.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="150"
+        x:Class="AF_Augmentation.Views.FileOverwriteApproval"
+		x:DataType="vm:FileOverwriteApprovalViewModel"
+		Height="150"
+		Width="250"
+		CanResize="False"
+        Title="Overwrite Approval">
+	<Grid RowDefinitions="Auto, Auto, *">
+
+		<Grid.Styles>
+			<Style Selector="Button.approve">
+				<Setter Property="HorizontalAlignment" Value="Center"></Setter>
+				<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+				<Setter Property="Height" Value="35"></Setter>
+				<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+				<Setter Property="Margin" Value="20,0"></Setter>
+				<Setter Property="Foreground" Value="White"></Setter>
+				<Setter Property="CornerRadius" Value="20"></Setter>
+				<Setter Property="MaxWidth" Value="80"></Setter>
+				<Setter Property="Background" Value="#48577D"></Setter>
+			</Style>
+		</Grid.Styles>
+
+		<TextBlock TextWrapping="Wrap"
+				   Grid.Row="0"
+				   HorizontalAlignment="Center"
+				   TextAlignment="Center"
+				   FontSize="16"
+				   Margin="15">Файлы с некоторыми именами уже существуют</TextBlock>
+		<TextBlock Grid.Row="1"
+				   HorizontalAlignment="Center"
+				   TextAlignment="Center"
+				   FontSize="16">Перезаписать?</TextBlock>
+		<StackPanel Grid.Row="2"
+					Orientation="Horizontal"
+					HorizontalAlignment="Center">
+			<Button Command="{Binding Positive}"
+					Classes="approve">Да</Button>
+			<Button Command="{Binding Negative}"
+					Classes="approve">Нет</Button>
+		</StackPanel>
+	</Grid>
+</Window>
