@@ -1,12 +1,10 @@
 using AF_Augmentation.Controls;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
+//using System.Linq;
 
 namespace AF_Augmentation
 {
@@ -33,8 +31,8 @@ namespace AF_Augmentation
 
             Logger += DisplayLog;
             // Create buttons for avaliable effects
-            foreach (string key in BaseOptionControl.ControlSelector.Keys)
-                OptionsList.Children.Add(new ChooseEffectButton { EffectName = key });
+            //foreach (string key in BaseOptionControl.ControlSelector.Keys)
+                //OptionsList.Children.Add(new ChooseEffectButton { EffectName = key });
         }
 
         public void UpdateBaseStack(List<string> names)
@@ -64,26 +62,6 @@ namespace AF_Augmentation
                 AmbientStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
         }
         public void UpdateApplyButtonActivity(bool applyActivity) => ApplyButton.IsEnabled = applyActivity;
-        public void AddOption(BaseOptionControl control)
-        {
-            OptionSelectorPopup.ToggleOpenClose();
-            OptionsStackPanel.Children.Add(control);
-        }
-
-        public void DeleteOption(int index)
-        {
-            var controls = MainWindow.Instance.OptionsStackPanel.Children;
-            controls.RemoveAt(index);
-
-            BaseOptionControl reference;
-
-            // Updating indexes of the rest controls
-            for (int i = 0; i < controls.Count; i++)
-            {
-                reference = controls[i] as BaseOptionControl;
-                reference.Index = i;
-            }
-        }
 
         public override void Render(DrawingContext context)
         {

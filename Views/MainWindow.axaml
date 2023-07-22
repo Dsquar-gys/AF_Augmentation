@@ -26,16 +26,16 @@
 					Padding="10">
 				<ScrollViewer VerticalScrollBarVisibility="Auto">
 					<Grid>
-						<StackPanel HorizontalAlignment="Center"
-									Name="OptionsList">
-						</StackPanel>
-						<ItemsControl Items="{Binding ListOfEffects}">
-							<ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<StackPanel HorizontalAlignment="Center"/>
-								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-						</ItemsControl>
+					<!--<StackPanel HorizontalAlignment="Center"
+								Name="OptionsList">
+					</StackPanel>-->
+					<ItemsControl Items="{Binding ControlSelector.Keys}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel HorizontalAlignment="Center"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
 					</Grid>
 				</ScrollViewer>
 
@@ -117,7 +117,7 @@
 				  Margin="10"
 				  RowDefinitions="Auto, *">
 				
-				<!-- Add Button --> <!--Добавить строковый параметр для команды, извлеченный из popup типа контрола-->
+				<!-- Add Button -->
 				<Button Classes="large"
 						Grid.Row="0"
 						Name="OptionSelectorButton"
@@ -131,10 +131,21 @@
 						Background="#9197A6"
 						CornerRadius="20"
 						Margin="0,10,0,0">
+					
 					<ScrollViewer>
-						<StackPanel Name="OptionsStackPanel"
-									Margin="10">
-						</StackPanel>
+						<!--<StackPanel Name="OptionsStackPanel"
+								Margin="10">
+						</StackPanel>-->
+						<Grid>
+							<ItemsControl Items="{Binding ListOfEffects}"
+										  Name="OptionsGrid">
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel HorizontalAlignment="Center"/>
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+							</ItemsControl>
+						</Grid>
 					</ScrollViewer>
 					
 				</Border>

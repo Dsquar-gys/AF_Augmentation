@@ -1,40 +1,44 @@
 ﻿using AF_Augmentation.Controls;
 using AF_Augmentation.Models;
-using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
 using AudioEffects;
-using AudioEffects.Effects;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace AF_Augmentation.ViewModels
 {
-    public class EffectViewModel : ViewModelBase
-    {
-
-    }
-
-    public class EffectViewModel1 : EffectViewModel
-    {
-
-    }
-
     public partial class WindowController : ObservableObject
     {
-        public List<string> BaseFiles { get; set; }
-        public List<string> AmbientFiles { get; set; }
-
+        public List<string>? BaseFiles { get; set; }
+        public List<string>? AmbientFiles { get; set; }
+        public static WindowController? Instance { get; set; }
+        public static Dictionary<ChooseEffectButton, Func<EffectViewModel>> ControlSelector { get; }
         public ObservableCollection<EffectViewModel> ListOfEffects { get; } = new();
 
         [ObservableProperty]
-        private string resultPath = "";
+        private string? resultPath = "";
 
+        static WindowController()
+        {
+            Type parentType = typeof(EffectViewModel);
+            IEnumerable<Type> heirsList = Assembly.GetAssembly(parentType)
+                                                  .GetTypes()
+                                                  .Where(type => type.IsSubclassOf(parentType));
+
+            ControlSelector = new();
+
+            foreach (var heir in heirsList)
+                ControlSelector.Add(new ChooseEffectButton { EffectName = heir.Name.Replace("ControlViewModel", "") },
+                                    () => heir.GetConstructor(Type.EmptyTypes).Invoke(null) as EffectViewModel);
+        }
         public WindowController()
         {
-            ListOfEffects.Add(new EffectViewModel1() );
+            Instance = this;
         }
 
         #region Relay Commands
@@ -63,52 +67,54 @@ namespace AF_Augmentation.ViewModels
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
-        private void AddOption(string controlType)
+        private void AddOption(ChooseEffectButton sender)
         {
-            if (BaseOptionControl.ControlSelector.ContainsKey(controlType))
-                MainWindow.Instance.AddOption(BaseOptionControl.ControlSelector[controlType].Invoke());
+            ListOfEffects.Add(ControlSelector[sender].Invoke());
+            MainWindow.Instance.OptionSelectorPopup.ToggleOpenClose();
         }
-        [RelayCommand]
-        private void DeleteOption(int index) => MainWindow.Instance.DeleteOption(index);
-        [RelayCommand]
-        private void SwitchRadio(BaseOptionControl control) => control.SwitchRadio();
-        [RelayCommand]
-        private void CommitChange(BaseOptionControl control)
+
+        public void DeleteOption(int index)
         {
-            control.Active = !control.Active;
+            ListOfEffects.RemoveAt(index);
 
-            IEffect command = control.CreateEffect();
-
-            if (!control.Active) // Register
-            {
-                if (control.AmbientToggle)
-                    Controller.effectAmbient.Register(command);
-                else Controller.effectBase.Register(command);
-            }
-            else // Revoke
-            {
-                if (control.AmbientToggle)
-                    Controller.effectAmbient.Remove(command);
-                else Controller.effectBase.Remove(command);
-            }
+            //Updating indexes of the rest controls
+            for (int i = 0; i < ListOfEffects.Count; i++)
+                ListOfEffects[i].Index = i;
         }
+        //[RelayCommand]
+        //private void CommitChange(BaseOptionControl control)
+        //{
+        //    control.Active = !control.Active;
+
+        //    IEffect command = control.CreateEffect();
+
+        //    if (!control.Active) // Register
+        //    {
+        //        if (control.AmbientToggle)
+        //            Controller.effectAmbient.Register(command);
+        //        else Controller.effectBase.Register(command);
+        //    }
+        //    else // Revoke
+        //    {
+        //        if (control.AmbientToggle)
+        //            Controller.effectAmbient.Remove(command);
+        //        else Controller.effectBase.Remove(command);
+        //    }
+        //}
 
         #endregion
 
         private void UpdateApplyButtonActivity()
         {
             bool applyActivate = BaseFiles is null || AmbientFiles is null ||
-                                 ResultPath is null || BaseFiles.Count == 0 ||
-                                 AmbientFiles.Count == 0 || ResultPath == "" ?
+                                 resultPath is null || BaseFiles.Count == 0 ||
+                                 AmbientFiles.Count == 0 || resultPath == "" ?
                                  false : true;
             MainWindow.Instance.UpdateApplyButtonActivity(applyActivate);
         }
 
-        
-
         public async Task RunApplicationAsync()
         {
-            var tr = Thread.CurrentThread.ManagedThreadId;
             await Controller.MixAsync();
             MainWindow.Instance.Logger.Invoke("Mixing in progress...");
         }

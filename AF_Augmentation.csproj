@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OptionsHandler\AudioEffects.csproj" />
+    <ProjectReference Include="..\AudioEffects\AudioEffects.csproj" />
   </ItemGroup>
 
   <ItemGroup>

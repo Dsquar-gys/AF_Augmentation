@@ -1,0 +1,100 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:AF_Augmentation.ViewModels"
+             mc:Ignorable="d"
+			 d:DesignWidth="800"
+			 d:DesignHeight="450"
+			 x:DataType="vm:EchoControlViewModel"
+			 x:CompileBindings="True"
+             x:Class="AF_Augmentation.Views.EchoControlView">
+	<Design.DataContext>
+		<vm:EchoControlViewModel />
+	</Design.DataContext>
+	<!--<ControlTemplate>-->
+		<Border Background="{DynamicResource ResourceKey=DarkGrayBrush}"
+				Padding="30,10"
+				Margin="10,10"
+				CornerRadius="20">
+			<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+				<Grid Grid.Row="0"
+					  ColumnDefinitions="*,auto">
+					<Label HorizontalAlignment="Center"
+						   Foreground="White">Echo</Label>
+					<Button Grid.Column="1"
+							Background="#CD5C5C"
+							CornerRadius="15"
+							IsEnabled="{Binding Active}"
+							Width="40"
+							Command="{Binding DeleteOptionCommand}"
+							CommandParameter="{Binding Index}">
+						<Image Source="/Assets/Cross.png"
+							   Width="15"
+							   Height="15" />
+					</Button>
+				</Grid>
+				<StackPanel Grid.Row="1"
+							Orientation="Horizontal"
+							HorizontalAlignment="Center">
+					<RadioButton Foreground="White"
+								 Margin="5,0"
+								 IsEnabled="{Binding Active}"
+								 IsChecked="{Binding BaseToggle}">Base</RadioButton>
+					<RadioButton Foreground="White"
+								 Margin="5,0"
+								 IsEnabled="{Binding Active}"
+								 IsChecked="{Binding AmbientToggle}">Ambient</RadioButton>
+				</StackPanel>
+				<StackPanel Grid.Row="2"
+							Orientation="Horizontal"
+							Margin="0,5">
+					<Label VerticalContentAlignment="Center"
+						   Foreground="White">Delay:</Label>
+					<TextBox Text="{Binding Delay}"
+							 Margin="10,0,0,0"
+							 Watermark="Seconds"
+							 IsEnabled="{Binding Active}" />
+				</StackPanel>
+				<StackPanel Grid.Row="3"
+							Margin="0,5">
+					<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Center">
+						<Label VerticalContentAlignment="Center"
+							   HorizontalAlignment="Center"
+							   Foreground="White"
+							   Grid.Column="0"
+							   Margin="5,0">Decay:</Label>
+						<Label Margin="5,0"
+							   Content="{Binding #DecaySlider.Value}"
+							   Foreground="White"></Label>
+					</StackPanel>
+					<Slider Name="DecaySlider"
+							Value="{Binding Decay}"
+							TickPlacement="Outside"
+							IsSnapToTickEnabled="True"
+							IsEnabled="{Binding Active}"
+							Ticks="0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1"
+							Minimum="0"
+							Maximum="1"/>
+				</StackPanel>
+				<StackPanel Grid.Row="4"
+							Orientation="Horizontal"
+							Margin="0,5">
+					<Label VerticalContentAlignment="Center"
+						   Foreground="White">Repetitions:</Label>
+					<TextBox Text="{Binding Repetitions}"
+							 Margin="10,0,0,0"
+							 Watermark="Times"
+							 IsEnabled="{Binding Active}" />
+				</StackPanel>
+				<CheckBox Grid.Row="5"
+						  HorizontalAlignment="Center"
+						  Foreground="White"
+						  Command="{Binding CommitChangeCommand}">Commited
+				</CheckBox>
+			</Grid>
+		</Border>
+	<!--</ControlTemplate>-->
+	
+</UserControl>

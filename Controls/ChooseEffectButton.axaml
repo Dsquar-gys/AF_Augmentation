@@ -21,8 +21,8 @@
       <ControlTemplate>
 		  <Button Name="ChooseButton"
 				  Content="{TemplateBinding EffectName}"
-				  Command="{Binding AddOption}"
-				  CommandParameter="{TemplateBinding EffectName}"></Button>
+				  Command="{Binding AddOptionCommand}"
+				  CommandParameter="{TemplateBinding Instance}"></Button>
       </ControlTemplate>
     </Setter>
   </Style>

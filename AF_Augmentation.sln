@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AF_Augmentation", "AF_Augmentation.csproj", "{91B31925-B03B-486E-BF76-BA3C99091A14}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioEffects", "..\OptionsHandler\AudioEffects.csproj", "{BAE27D33-718D-4C66-8B16-F7FCDA6A4298}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioEffects", "..\AudioEffects\AudioEffects.csproj", "{BAE27D33-718D-4C66-8B16-F7FCDA6A4298}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
