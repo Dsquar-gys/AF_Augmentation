@@ -12,6 +12,7 @@
 		<StyleInclude Source="/Controls/GridElementControl.axaml"></StyleInclude>
 		<StyleInclude Source="/Controls/AnimatedPopup.axaml"></StyleInclude>
 		<StyleInclude Source="/Controls/ChooseEffectButton.axaml"></StyleInclude>
+		<StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml"/>
     </Application.Styles>
 	
 	<Application.Resources>

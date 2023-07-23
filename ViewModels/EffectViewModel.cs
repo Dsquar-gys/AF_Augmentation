@@ -2,7 +2,6 @@
 using AudioEffects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 
 namespace AF_Augmentation.ViewModels
 {

@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace AF_Augmentation.Views;
 
-public partial class EchoControlView : UserControl
+public partial class LoadingRing : UserControl
 {
-    public EchoControlView()
+    public LoadingRing()
     {
         InitializeComponent();
     }

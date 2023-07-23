@@ -20,7 +20,6 @@ namespace AF_Augmentation
         #endregion
 
         public static MainWindow Instance { get; private set; }
-        public Action<string> Logger;
         public MainWindow()
         {
             Instance = this;
@@ -29,8 +28,6 @@ namespace AF_Augmentation
             mOptionSelectorPopup = this.FindControl<Control>("OptionSelectorPopup") ?? throw new Exception("Can't find Option Selector Popup by name");
             mMainGrid = this.FindControl<Control>("MainGrid") ?? throw new Exception("Can't find Main Grid by name");
             mOptionSelectorButton = this.FindControl<Control>("OptionSelectorButton") ?? throw new Exception("Can't find Option Selector Button by name");
-
-            Logger += DisplayLog;
         }
 
         public void UpdateBaseStack(List<string> names)
@@ -39,19 +36,6 @@ namespace AF_Augmentation
             foreach (string name in names)
                 BaseStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
         }
-
-        private void DisplayLog(string message) => Instance.Log.Content = message;
-        //{
-        //    while(true)
-        //    {
-        //        Instance.Log.Content = "";
-        //        foreach (var sym in message)
-        //        {
-        //            Instance.Log.Content += sym.ToString();
-        //        }
-        //    }
-        //}
-        //private async Task DisplayLogAsync(string message) => await Task.Run(() => DisplayLog(message));
 
         public void UpdateAmbientStack(List<string> names)
         {
@@ -68,7 +52,7 @@ namespace AF_Augmentation
             var position = mOptionSelectorButton.TranslatePoint(new Point(), mMainGrid) ??
                 throw new Exception("Can't get Translation Point from Option Selector Button");
 
-            Dispatcher.UIThread.Post( () => mOptionSelectorPopup.Margin = new Thickness(
+            Dispatcher.UIThread.Post(() => mOptionSelectorPopup.Margin = new Thickness(
                 position.X,
                 position.Y + mOptionSelectorButton.Bounds.Height,
                 0,

@@ -1,6 +1,5 @@
 ﻿using AF_Augmentation.Controls;
 using AF_Augmentation.Models;
-using AudioEffects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -22,6 +21,10 @@ namespace AF_Augmentation.ViewModels
 
         [ObservableProperty]
         private string? resultPath = "";
+        [ObservableProperty]
+        private bool shaded = false;
+        [ObservableProperty]
+        private string activeText = "";
 
         static WindowController()
         {
@@ -46,24 +49,28 @@ namespace AF_Augmentation.ViewModels
         [RelayCommand]
         private async Task SelectBaseFolderAsync()
         {
+            Shaded = true;
             BaseFiles = await Controller.SetBaseFolderAsync();
+            Shaded = false;
             MainWindow.Instance.UpdateBaseStack(BaseFiles);
-            MainWindow.Instance.Logger.Invoke("Base folder selected...");
+            ActiveText = "Base folder selected...";
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
         private async Task SelectAmbientFolderAsync()
         {
+            Shaded = true;
             AmbientFiles = await Controller.SetAmbientFolderAsync();
+            Shaded = false;
             MainWindow.Instance.UpdateAmbientStack(AmbientFiles);
-            MainWindow.Instance.Logger.Invoke("Ambient folder selected...");
+            ActiveText = "Ambient folder selected...";
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
         private async Task SelectResultFolder()
         {
             ResultPath = await Controller.SetResultFolderAsync();
-            MainWindow.Instance.Logger.Invoke("Result folder selected...");
+            ActiveText = "Result folder selected...";
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
@@ -95,8 +102,11 @@ namespace AF_Augmentation.ViewModels
 
         public async Task RunApplicationAsync()
         {
+            ActiveText = "Mixing in progress...";
+            Shaded = true;
             await Controller.MixAsync();
-            MainWindow.Instance.Logger.Invoke("Mixing in progress...");
+            Shaded = false;
+            ActiveText = "Mixing is done!";
         }
     }
 }
