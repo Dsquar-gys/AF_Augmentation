@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:AF_Augmentation.ViewModels"
+             mc:Ignorable="d"
+			 d:DesignWidth="300"
+			 d:DesignHeight="200"
+			 x:DataType="vm:VolumeControlViewModel"
+			 x:CompileBindings="True"
+             x:Class="AF_Augmentation.Views.VolumeControlView">
+
+	<Design.DataContext>
+		<vm:VolumeControlViewModel />
+	</Design.DataContext>
+
+	<Border	Background="{DynamicResource ResourceKey=DarkGrayBrush}"
+			Padding="30,10"
+			Margin="10,10"
+			CornerRadius="20">
+		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+			<Grid Grid.Row="0"
+				  ColumnDefinitions="*,auto">
+				<Label HorizontalAlignment="Center"
+					   Foreground="White">Volume Multiply</Label>
+				<Button Grid.Column="1"
+						Background="#CD5C5C"
+						CornerRadius="15"
+						IsEnabled="{Binding Active}"
+						Width="40"
+						Command="{Binding DeleteOptionCommand}"
+						CommandParameter="{Binding Index}">
+					<Image Source="/Assets/Cross.png"
+						   Width="15"
+						   Height="15" />
+				</Button>
+			</Grid>
+			<StackPanel Grid.Row="1"
+						Orientation="Horizontal"
+						HorizontalAlignment="Center">
+				<RadioButton Foreground="White"
+							 Margin="5,0"
+							 IsEnabled="{Binding Active}"
+							 IsChecked="{Binding BaseToggle}">Base</RadioButton>
+				<RadioButton Foreground="White"
+							 Margin="5,0"
+							 IsEnabled="{Binding Active}"
+							 IsChecked="{Binding AmbientToggle}">Ambient</RadioButton>
+			</StackPanel>
+			<StackPanel Grid.Row="3"
+						Margin="0,5">
+				<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Center">
+					<Label VerticalContentAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Grid.Column="0"
+						   Foreground="White"
+						   Margin="5,0">Multiply by</Label>
+					<Label Margin="5,0"
+						   Foreground="White"
+						   Content="{Binding #VolumeSlider.Value}"></Label>
+				</StackPanel>
+
+				<Slider Name="VolumeSlider"
+						TickPlacement="Outside"
+						IsSnapToTickEnabled="True"
+						IsEnabled="{Binding Active}"
+						TickFrequency="0.1"
+						Minimum="0"
+						Maximum="3"/>
+			</StackPanel>
+			<CheckBox Grid.Row="5"
+					  HorizontalAlignment="Center"
+					  Foreground="White"
+					  Command="{Binding CommitChangeCommand}"
+					  CommandParameter="{Binding Instance}">Commited</CheckBox>
+		</Grid>
+	</Border>
+	
+</UserControl>

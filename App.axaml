@@ -10,9 +10,7 @@
     <Application.Styles>
         <FluentTheme Mode="Light"/>
 		<StyleInclude Source="/Controls/GridElementControl.axaml"></StyleInclude>
-		<StyleInclude Source="/Controls/EchoControl.axaml"></StyleInclude>
 		<StyleInclude Source="/Controls/AnimatedPopup.axaml"></StyleInclude>
-		<StyleInclude Source="/Controls/VolumeMultiplyControl.axaml"></StyleInclude>
 		<StyleInclude Source="/Controls/ChooseEffectButton.axaml"></StyleInclude>
     </Application.Styles>
 	

@@ -30,9 +30,6 @@ namespace AF_Augmentation
             mOptionSelectorButton = this.FindControl<Control>("OptionSelectorButton") ?? throw new Exception("Can't find Option Selector Button by name");
 
             Logger += DisplayLog;
-            // Create buttons for avaliable effects
-            //foreach (string key in BaseOptionControl.ControlSelector.Keys)
-                //OptionsList.Children.Add(new ChooseEffectButton { EffectName = key });
         }
 
         public void UpdateBaseStack(List<string> names)

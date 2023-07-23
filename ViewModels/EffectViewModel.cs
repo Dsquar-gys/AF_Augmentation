@@ -10,7 +10,6 @@ namespace AF_Augmentation.ViewModels
     {
         #region Abstract Members
 
-        public abstract string EffectName { get; }
         public abstract IEffect CreateEffect();
 
         #endregion

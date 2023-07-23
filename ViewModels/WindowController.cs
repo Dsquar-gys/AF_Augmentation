@@ -81,26 +81,6 @@ namespace AF_Augmentation.ViewModels
             for (int i = 0; i < ListOfEffects.Count; i++)
                 ListOfEffects[i].Index = i;
         }
-        //[RelayCommand]
-        //private void CommitChange(BaseOptionControl control)
-        //{
-        //    control.Active = !control.Active;
-
-        //    IEffect command = control.CreateEffect();
-
-        //    if (!control.Active) // Register
-        //    {
-        //        if (control.AmbientToggle)
-        //            Controller.effectAmbient.Register(command);
-        //        else Controller.effectBase.Register(command);
-        //    }
-        //    else // Revoke
-        //    {
-        //        if (control.AmbientToggle)
-        //            Controller.effectAmbient.Remove(command);
-        //        else Controller.effectBase.Remove(command);
-        //    }
-        //}
 
         #endregion
 

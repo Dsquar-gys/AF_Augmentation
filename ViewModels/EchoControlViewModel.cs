@@ -9,7 +9,6 @@ namespace AF_Augmentation.ViewModels
     {
         #region Override Members
 
-        public override string EffectName { get; } = "Echo";
         public override IEffect CreateEffect()
         {
             double delayValue;

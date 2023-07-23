@@ -6,7 +6,7 @@ namespace AF_Augmentation.ViewModels
 {
     public class FileOverwriteApprovalViewModel : ViewModelBase
     {
-        private Thread callbackThread;
+        private readonly Thread callbackThread;
         FileOverwriteApproval approvalWindow;
         public FileOverwriteApprovalViewModel(Thread thread)
         {

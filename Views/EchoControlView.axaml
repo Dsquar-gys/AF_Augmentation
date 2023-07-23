@@ -9,9 +9,11 @@
 			 x:DataType="vm:EchoControlViewModel"
 			 x:CompileBindings="True"
              x:Class="AF_Augmentation.Views.EchoControlView">
+	
 	<Design.DataContext>
 		<vm:EchoControlViewModel />
 	</Design.DataContext>
+	
 	<!--<ControlTemplate>-->
 		<Border Background="{DynamicResource ResourceKey=DarkGrayBrush}"
 				Padding="30,10"
