@@ -71,6 +71,9 @@ namespace AF_Augmentation.Models
         public static async Task<List<string>> SetAmbientFolderAsync() =>
             await Task.Run(() => SetAmbientFolder());
 
+        public static async Task<string> SetResultFolderAsync() =>
+            await Task.Run(() => SetResultFolder());
+
         #endregion
 
         public static void Mix()

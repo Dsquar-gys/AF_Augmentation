@@ -1,14 +1,19 @@
 using Avalonia.Controls;
+using System.Runtime.InteropServices;
+using System;
 
 namespace AF_Augmentation.Views;
 
 public partial class FileOverwriteApproval : Window
 {
+    public bool closeable = false;
     public FileOverwriteApproval()
     {
         InitializeComponent();
     }
 
-    // Unable to close window
-    protected override bool HandleClosing() => true;
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        e.Cancel = !closeable;
+    }
 }

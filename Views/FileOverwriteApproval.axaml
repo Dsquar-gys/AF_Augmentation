@@ -9,7 +9,8 @@
 		Height="150"
 		Width="250"
 		CanResize="False"
-        Title="Overwrite Approval">
+        Title="Overwrite Approval"
+		WindowStartupLocation="CenterOwner">
 	<Grid RowDefinitions="Auto, Auto, *">
 
 		<Grid.Styles>

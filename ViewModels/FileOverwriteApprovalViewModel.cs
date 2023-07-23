@@ -19,11 +19,13 @@ namespace AF_Augmentation.ViewModels
         }
         public void Positive()
         {
+            approvalWindow.closeable = true;
             Answer(true);
             callbackThread.Interrupt();
         }
         public void Negative()
         {
+            approvalWindow.closeable = true;
             Answer(false);
             callbackThread.Interrupt();
         }

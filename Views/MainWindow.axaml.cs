@@ -2,6 +2,7 @@ using AF_Augmentation.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
 //using System.Linq;
@@ -67,11 +68,11 @@ namespace AF_Augmentation
             var position = mOptionSelectorButton.TranslatePoint(new Point(), mMainGrid) ??
                 throw new Exception("Can't get Translation Point from Option Selector Button");
 
-            mOptionSelectorPopup.Margin = new Thickness(
+            Dispatcher.UIThread.Post( () => mOptionSelectorPopup.Margin = new Thickness(
                 position.X,
                 position.Y + mOptionSelectorButton.Bounds.Height,
                 0,
-                0);
+                0));
         }
     }
 }

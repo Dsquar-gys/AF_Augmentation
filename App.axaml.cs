@@ -18,7 +18,7 @@ namespace AF_Augmentation
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
+                BindingPlugins.DataValidators.RemoveAt(0);
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = new WindowController(),

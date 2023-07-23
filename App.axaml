@@ -8,7 +8,7 @@
 	</Application.DataTemplates>
 	
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <FluentTheme />
 		<StyleInclude Source="/Controls/GridElementControl.axaml"></StyleInclude>
 		<StyleInclude Source="/Controls/AnimatedPopup.axaml"></StyleInclude>
 		<StyleInclude Source="/Controls/ChooseEffectButton.axaml"></StyleInclude>

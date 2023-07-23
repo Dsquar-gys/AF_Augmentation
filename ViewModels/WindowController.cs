@@ -60,9 +60,9 @@ namespace AF_Augmentation.ViewModels
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
-        private void SelectResultFolder()
+        private async Task SelectResultFolder()
         {
-            ResultPath = Controller.SetResultFolder();
+            ResultPath = await Controller.SetResultFolderAsync();
             MainWindow.Instance.Logger.Invoke("Result folder selected...");
             UpdateApplyButtonActivity();
         }

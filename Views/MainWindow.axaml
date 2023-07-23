@@ -29,7 +29,7 @@
 					<!--<StackPanel HorizontalAlignment="Center"
 								Name="OptionsList">
 					</StackPanel>-->
-					<ItemsControl Items="{Binding ControlSelector.Keys}">
+					<ItemsControl ItemsSource="{Binding ControlSelector.Keys}">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<StackPanel HorizontalAlignment="Center"/>
@@ -133,11 +133,8 @@
 						Margin="0,10,0,0">
 					
 					<ScrollViewer>
-						<!--<StackPanel Name="OptionsStackPanel"
-								Margin="10">
-						</StackPanel>-->
 						<Grid>
-							<ItemsControl Items="{Binding ListOfEffects}"
+							<ItemsControl ItemsSource="{Binding ListOfEffects}"
 										  Name="OptionsGrid">
 								<ItemsControl.ItemsPanel>
 									<ItemsPanelTemplate>
