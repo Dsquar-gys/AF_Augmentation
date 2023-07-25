@@ -13,18 +13,30 @@ namespace AF_Augmentation.ViewModels
 {
     public partial class WindowController : ObservableObject
     {
-        public List<string>? BaseFiles { get; set; }
-        public List<string>? AmbientFiles { get; set; }
-        public static WindowController? Instance { get; set; }
-        public static Dictionary<ChooseEffectButton, Func<EffectViewModel>> ControlSelector { get; }
-        public ObservableCollection<EffectViewModel> ListOfEffects { get; } = new();
+        #region Observable Properties
 
+        [ObservableProperty]
+        private ObservableCollection<GridElementControl> baseFiles = new();
+        [ObservableProperty]
+        private ObservableCollection<GridElementControl> ambientFiles = new();
         [ObservableProperty]
         private string? resultPath = "";
         [ObservableProperty]
         private bool shaded = false;
         [ObservableProperty]
         private string activeText = "";
+        [ObservableProperty]
+        private bool applyActivity = false;
+
+        #endregion
+        #region Window Controller Properties
+
+        public static WindowController? Instance { get; set; }
+        public static Dictionary<ChooseEffectButton, Func<EffectViewModel>> ControlSelector { get; }
+        private ObservableCollection<EffectViewModel> ListOfEffects { get; } = new();
+
+        #endregion
+        #region Constructors
 
         static WindowController()
         {
@@ -39,20 +51,20 @@ namespace AF_Augmentation.ViewModels
                 ControlSelector.Add(new ChooseEffectButton { EffectName = heir.Name.Replace("ControlViewModel", "") },
                                     () => heir.GetConstructor(Type.EmptyTypes).Invoke(null) as EffectViewModel);
         }
-        public WindowController()
-        {
-            Instance = this;
-        }
+        public WindowController() => Instance = this;
 
+        #endregion
         #region Relay Commands
 
         [RelayCommand]
         private async Task SelectBaseFolderAsync()
         {
             Shaded = true;
-            BaseFiles = await Controller.SetBaseFolderAsync();
+            BaseFiles.Clear();
+            foreach (string name in await Controller.SetBaseFolderAsync())
+                BaseFiles.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
             Shaded = false;
-            MainWindow.Instance.UpdateBaseStack(BaseFiles);
+
             ActiveText = "Base folder selected...";
             UpdateApplyButtonActivity();
         }
@@ -60,9 +72,11 @@ namespace AF_Augmentation.ViewModels
         private async Task SelectAmbientFolderAsync()
         {
             Shaded = true;
-            AmbientFiles = await Controller.SetAmbientFolderAsync();
+            AmbientFiles.Clear();
+            foreach (string name in await Controller.SetAmbientFolderAsync())
+                AmbientFiles.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
             Shaded = false;
-            MainWindow.Instance.UpdateAmbientStack(AmbientFiles);
+
             ActiveText = "Ambient folder selected...";
             UpdateApplyButtonActivity();
         }
@@ -90,15 +104,14 @@ namespace AF_Augmentation.ViewModels
         }
 
         #endregion
+        #region Private Methods
 
-        private void UpdateApplyButtonActivity()
-        {
-            bool applyActivate = BaseFiles is null || AmbientFiles is null ||
-                                 resultPath is null || BaseFiles.Count == 0 ||
-                                 AmbientFiles.Count == 0 || resultPath == "" ?
-                                 false : true;
-            MainWindow.Instance.UpdateApplyButtonActivity(applyActivate);
-        }
+        private void UpdateApplyButtonActivity() => ApplyActivity = BaseFiles is null || AmbientFiles is null ||
+            resultPath is null || BaseFiles.Count == 0 ||
+            AmbientFiles.Count == 0 || resultPath == "" ?
+            false : true;
+
+        #endregion
 
         public async Task RunApplicationAsync()
         {

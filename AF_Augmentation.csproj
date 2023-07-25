@@ -32,9 +32,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\EffectView1.axaml.cs">
-      <DependentUpon>EffectView1.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

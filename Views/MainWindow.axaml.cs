@@ -30,21 +30,6 @@ namespace AF_Augmentation
             mOptionSelectorButton = this.FindControl<Control>("OptionSelectorButton") ?? throw new Exception("Can't find Option Selector Button by name");
         }
 
-        public void UpdateBaseStack(List<string> names)
-        {
-            BaseStackPanel.Children.Clear();
-            foreach (string name in names)
-                BaseStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
-        }
-
-        public void UpdateAmbientStack(List<string> names)
-        {
-            AmbientStackPanel.Children.Clear();
-            foreach (string name in names)
-                AmbientStackPanel.Children.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
-        }
-        public void UpdateApplyButtonActivity(bool applyActivity) => ApplyButton.IsEnabled = applyActivity;
-
         public override void Render(DrawingContext context)
         {
             base.Render(context);

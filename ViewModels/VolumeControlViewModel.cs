@@ -14,7 +14,7 @@ namespace AF_Augmentation.ViewModels
         #region Internal Parameters
 
         [ObservableProperty]
-        private double multiplyBy;
+        private float multiplyBy = 0;
 
         #endregion
     }

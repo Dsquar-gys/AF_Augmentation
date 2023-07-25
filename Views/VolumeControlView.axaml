@@ -62,6 +62,7 @@
 				</StackPanel>
 
 				<Slider Name="VolumeSlider"
+						Value="{Binding MultiplyBy}"
 						TickPlacement="Outside"
 						IsSnapToTickEnabled="True"
 						IsEnabled="{Binding Active}"

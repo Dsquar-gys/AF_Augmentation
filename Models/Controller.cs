@@ -90,8 +90,8 @@ namespace AF_Augmentation.Models
                         effectBase.SetSource(reader1);
                         effectAmbient.SetSource(reader2);
 
-                        BlockAlignReductionStream processedBase = new BlockAlignReductionStream(effectBase);
-                        BlockAlignReductionStream processedAmbient = new BlockAlignReductionStream(effectAmbient);
+                        BlockAlignReductionStream processedBase = new(effectBase);
+                        BlockAlignReductionStream processedAmbient = new(effectAmbient);
 
                         // Mixing
                         var mixer = CreateMixer(processedBase, processedAmbient);
