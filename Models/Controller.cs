@@ -91,11 +91,8 @@ namespace AF_Augmentation.Models
                         effectBase.SetSource(reader1);
                         effectAmbient.SetSource(reader2);
 
-                        BlockAlignReductionStream processedBase = new(effectBase);
-                        BlockAlignReductionStream processedAmbient = new(effectAmbient);
-
                         // Mixing
-                        var mixer = CreateMixer(processedBase, processedAmbient);
+                        var mixer = CreateMixer(effectBase, effectAmbient);
 
                         // Output
                         var newFile = ExtractResultPath(baseAudioPath, ambientAudioPath);
@@ -121,7 +118,7 @@ namespace AF_Augmentation.Models
                                     return;
                             }
                         }
-                        WaveFileWriter.CreateWaveFile(newFile, mixer);
+                        WaveFileWriter.CreateWaveFile16(newFile, mixer);
                     }
                 }
             ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, ThreadPool.ThreadCount);
@@ -132,15 +129,14 @@ namespace AF_Augmentation.Models
             return resultDirectory + firstFile.Substring(sourceBase.Length + 1, firstFile.Length - sourceBase.Length - 5) +
                 '_' + secondFile.Substring(sourceAmbient.Length + 1, secondFile.Length - sourceAmbient.Length - 5) + ".wav";
         }
-        public static MixingWaveProvider32 CreateMixer(WaveStream first, WaveStream second)
+        public static MixingSampleProvider CreateMixer(ISampleProvider first, ISampleProvider second)
         {
             var outFormat = WaveFormat.CreateIeeeFloatWaveFormat(44100, first.WaveFormat.Channels);
 
-            using (var resampler = new MediaFoundationResampler(first, outFormat))
-            using (var resampler2 = new MediaFoundationResampler(second, outFormat))
-            {
-                return new MixingWaveProvider32(new[] { resampler, resampler2 });
-            }
+            var x = new MixingSampleProvider(outFormat);
+            x.AddMixerInput(first);
+            x.AddMixerInput(second);
+            return x;
         }
     }
 }
