@@ -3,6 +3,7 @@ using AudioEffects;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,8 +96,10 @@ namespace AF_Augmentation.Models
 
                         // Mixing
                         var mixer = CreateMixer(processedBase, processedAmbient);
+
                         // Output
                         var newFile = ExtractResultPath(baseAudioPath, ambientAudioPath);
+
                         // If the file already exists...
                         if (Directory.GetFiles(resultDirectory).Contains(newFile) && !overwriteApproval)
                         {
@@ -129,9 +132,10 @@ namespace AF_Augmentation.Models
             return resultDirectory + firstFile.Substring(sourceBase.Length + 1, firstFile.Length - sourceBase.Length - 5) +
                 '_' + secondFile.Substring(sourceAmbient.Length + 1, secondFile.Length - sourceAmbient.Length - 5) + ".wav";
         }
-        public static MixingWaveProvider32 CreateMixer(BlockAlignReductionStream first, BlockAlignReductionStream second)
+        public static MixingWaveProvider32 CreateMixer(WaveStream first, WaveStream second)
         {
             var outFormat = WaveFormat.CreateIeeeFloatWaveFormat(44100, first.WaveFormat.Channels);
+
             using (var resampler = new MediaFoundationResampler(first, outFormat))
             using (var resampler2 = new MediaFoundationResampler(second, outFormat))
             {
