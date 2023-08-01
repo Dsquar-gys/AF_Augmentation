@@ -1,6 +1,8 @@
+using AF_Augmentation.Behaviors;
 using AF_Augmentation.Controls;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
@@ -18,8 +20,13 @@ namespace AF_Augmentation
         private Control mOptionSelectorButton;
 
         #endregion
+        #region Public Properties
 
         public static MainWindow Instance { get; private set; }
+
+        #endregion
+        #region Constructor
+
         public MainWindow()
         {
             Instance = this;
@@ -30,6 +37,7 @@ namespace AF_Augmentation
             mOptionSelectorButton = this.FindControl<Control>("OptionSelectorButton") ?? throw new Exception("Can't find Option Selector Button by name");
         }
 
+        #endregion
         public override void Render(DrawingContext context)
         {
             base.Render(context);

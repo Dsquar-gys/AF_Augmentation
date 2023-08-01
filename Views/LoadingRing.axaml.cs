@@ -4,8 +4,5 @@ namespace AF_Augmentation.Views;
 
 public partial class LoadingRing : UserControl
 {
-    public LoadingRing()
-    {
-        InitializeComponent();
-    }
+    public LoadingRing() => InitializeComponent();
 }

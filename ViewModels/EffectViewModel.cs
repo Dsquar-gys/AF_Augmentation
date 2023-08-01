@@ -2,6 +2,7 @@
 using AudioEffects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks;
 
 namespace AF_Augmentation.ViewModels
 {
@@ -33,7 +34,8 @@ namespace AF_Augmentation.ViewModels
         #region Relay Commands
 
         [RelayCommand]
-        private void DeleteOption(int index) => WindowController.Instance.DeleteOption(index);
+        private async Task DeleteOption(int index) =>
+            await WindowController.Instance.DeleteOptionAsync(index);
 
         [RelayCommand]
         private void CommitChange()

@@ -5,8 +5,7 @@ namespace AF_Augmentation.Controls
 {
     public class GridElementControl : TemplatedControl
     {
-        public GridElementControl() : this("Example.wav")
-        { }
+        public GridElementControl() : this("Example.wav"){ }
         public GridElementControl(string fileName) => FileName = fileName;
 
         public static readonly StyledProperty<string> FileNameProperty = AvaloniaProperty.Register<GridElementControl, string>(

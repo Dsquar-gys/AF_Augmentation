@@ -4,8 +4,5 @@ namespace AF_Augmentation.Views;
 
 public partial class EchoControlView : UserControl
 {
-    public EchoControlView()
-    {
-        InitializeComponent();
-    }
+    public EchoControlView() => InitializeComponent();
 }

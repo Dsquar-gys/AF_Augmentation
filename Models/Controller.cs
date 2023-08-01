@@ -15,15 +15,23 @@ namespace AF_Augmentation.Models
 {
     public static class Controller
     {
+        #region Private Members
+
         private static string sourceBase;
         private static string sourceAmbient;
         private static string resultDirectory;
-        static List<string> basePaths;
-        static List<string> ambientPaths;
+        private static List<string> basePaths;
+        private static List<string> ambientPaths;
+
+        #endregion
+        #region Public Properties
 
         public static bool overwriteApproval { get; set; }
         public static EffectStream effectBase { get; }
         public static EffectStream effectAmbient { get; }
+
+        #endregion
+        #region Constructor
 
         static Controller()
         {
@@ -34,37 +42,8 @@ namespace AF_Augmentation.Models
             basePaths = new List<string>();
         }
 
-        public static List<string> SetBaseFolder()
-        {
-            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
-            if (result is not null)
-            {
-                sourceBase = result;
-                basePaths = Directory.EnumerateFiles(sourceBase, "*.wav").ToList();
-            }
-            return basePaths;
-        }
-
-        public static List<string> SetAmbientFolder()
-        {
-            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
-            if (result is not null)
-            {
-                sourceAmbient = result;
-                ambientPaths = Directory.GetFiles(sourceAmbient, "*.wav").ToList();
-            }
-            return ambientPaths;
-        }
-
-        public static string SetResultFolder()
-        {
-            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
-            if (result is not null)
-                resultDirectory = result + '\\';
-            return resultDirectory;
-        }
-
-        #region Async Setters
+        #endregion
+        #region Async Methods
 
         public static async Task<List<string>> SetBaseFolderAsync() =>
             await Task.Run(() => SetBaseFolder());
@@ -75,9 +54,39 @@ namespace AF_Augmentation.Models
         public static async Task<string> SetResultFolderAsync() =>
             await Task.Run(() => SetResultFolder());
 
-        #endregion
+        public static async Task MixAsync() => await Task.Run(() => Mix());
 
-        public static void Mix()
+        #endregion
+        #region Private Methods
+
+        private static List<string> SetBaseFolder()
+        {
+            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
+            if (result is not null)
+            {
+                sourceBase = result;
+                basePaths = Directory.EnumerateFiles(sourceBase, "*.wav").ToList();
+            }
+            return basePaths;
+        }
+        private static List<string> SetAmbientFolder()
+        {
+            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
+            if (result is not null)
+            {
+                sourceAmbient = result;
+                ambientPaths = Directory.GetFiles(sourceAmbient, "*.wav").ToList();
+            }
+            return ambientPaths;
+        }
+        private static string SetResultFolder()
+        {
+            string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
+            if (result is not null)
+                resultDirectory = result + '\\';
+            return resultDirectory;
+        }
+        private static void Mix()
         {
             overwriteApproval = false;
             ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, 10);
@@ -123,13 +132,7 @@ namespace AF_Augmentation.Models
                 }
             ThreadPool.SetMaxThreads(ThreadPool.ThreadCount, ThreadPool.ThreadCount);
         }
-        public static async Task MixAsync() => await Task.Run(() => Mix());
-        private static string ExtractResultPath(string firstFile, string secondFile)
-        {
-            return resultDirectory + firstFile.Substring(sourceBase.Length + 1, firstFile.Length - sourceBase.Length - 5) +
-                '_' + secondFile.Substring(sourceAmbient.Length + 1, secondFile.Length - sourceAmbient.Length - 5) + ".wav";
-        }
-        public static MixingSampleProvider CreateMixer(ISampleProvider first, ISampleProvider second)
+        private static MixingSampleProvider CreateMixer(ISampleProvider first, ISampleProvider second)
         {
             var outFormat = WaveFormat.CreateIeeeFloatWaveFormat(44100, first.WaveFormat.Channels);
 
@@ -138,5 +141,12 @@ namespace AF_Augmentation.Models
             x.AddMixerInput(second);
             return x;
         }
+        private static string ExtractResultPath(string firstFile, string secondFile)
+        {
+            return resultDirectory + firstFile.Substring(sourceBase.Length + 1, firstFile.Length - sourceBase.Length - 5) +
+                '_' + secondFile.Substring(sourceAmbient.Length + 1, secondFile.Length - sourceAmbient.Length - 5) + ".wav";
+        }
+
+        #endregion
     }
 }

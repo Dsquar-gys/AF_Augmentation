@@ -1,13 +1,28 @@
 ﻿using AF_Augmentation.Models;
 using AF_Augmentation.Views;
+using CommunityToolkit.Mvvm.Input;
 using System.Threading;
 
 namespace AF_Augmentation.ViewModels
 {
-    public class FileOverwriteApprovalViewModel : ViewModelBase
+    public partial class FileOverwriteApprovalViewModel : ViewModelBase
     {
+        #region Private Members
+
         private readonly Thread callbackThread;
-        FileOverwriteApproval approvalWindow;
+        private FileOverwriteApproval approvalWindow;
+
+        private void Answer(bool answer)
+        {
+            approvalWindow.closeable = true;
+            approvalWindow.Close();
+            Controller.overwriteApproval = answer;
+            callbackThread.Interrupt();
+        }
+
+        #endregion
+        #region Constructor
+
         public FileOverwriteApprovalViewModel(Thread thread)
         {
             callbackThread = thread;
@@ -17,22 +32,15 @@ namespace AF_Augmentation.ViewModels
             };
             approvalWindow.Show();
         }
-        public void Positive()
-        {
-            approvalWindow.closeable = true;
-            Answer(true);
-            callbackThread.Interrupt();
-        }
-        public void Negative()
-        {
-            approvalWindow.closeable = true;
-            Answer(false);
-            callbackThread.Interrupt();
-        }
-        private void Answer(bool answer)
-        {
-            approvalWindow.Close();
-            Controller.overwriteApproval = answer;
-        }
+
+        #endregion
+        #region Relay Commands
+
+        [RelayCommand]
+        private void Positive() => Answer(true);
+        [RelayCommand]
+        private void Negative() => Answer(false);
+
+        #endregion
     }
 }

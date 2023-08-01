@@ -6,10 +6,7 @@ namespace AF_Augmentation.Controls;
 
 public class ChooseEffectButton : TemplatedControl
 {
-    public ChooseEffectButton()
-    {
-        Instance = this;
-    }
+    public ChooseEffectButton() => Instance = this;
 
     public static readonly StyledProperty<string> EffectNameProperty = AvaloniaProperty.Register<ChooseEffectButton, string>(
                 nameof(EffectName));

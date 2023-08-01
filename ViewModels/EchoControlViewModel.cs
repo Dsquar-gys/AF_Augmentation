@@ -20,6 +20,7 @@ namespace AF_Augmentation.ViewModels
             }
             catch (Exception)
             {
+                WindowController.Instance.ActiveText = "Wrong delay or repetitions number";
                 delayValue = 0;
                 repetitionsValue = 0;
             }

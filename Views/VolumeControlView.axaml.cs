@@ -6,8 +6,5 @@ namespace AF_Augmentation.Views;
 
 public partial class VolumeControlView : UserControl
 {
-    public VolumeControlView()
-    {
-        InitializeComponent();
-    }
+    public VolumeControlView() => InitializeComponent();
 }

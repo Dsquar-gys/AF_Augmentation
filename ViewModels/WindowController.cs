@@ -1,12 +1,16 @@
 ﻿using AF_Augmentation.Controls;
 using AF_Augmentation.Models;
+using Avalonia.Input;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AF_Augmentation.ViewModels
@@ -32,7 +36,7 @@ namespace AF_Augmentation.ViewModels
         #region Window Controller Properties
 
         public static WindowController? Instance { get; set; }
-        public static Dictionary<ChooseEffectButton, Func<EffectViewModel>> ControlSelector { get; }
+        private static Dictionary<ChooseEffectButton, Func<EffectViewModel>> ControlSelector { get; }
         private ObservableCollection<EffectViewModel> ListOfEffects { get; } = new();
 
         #endregion
@@ -65,7 +69,7 @@ namespace AF_Augmentation.ViewModels
                 BaseFiles.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
             Shaded = false;
 
-            ActiveText = "Base folder selected...";
+            await DisplayLogAsync("Base folder selected...");
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
@@ -77,14 +81,14 @@ namespace AF_Augmentation.ViewModels
                 AmbientFiles.Add(new GridElementControl(name.Substring(name.LastIndexOf('\\') + 1)));
             Shaded = false;
 
-            ActiveText = "Ambient folder selected...";
+            await DisplayLogAsync("Ambient folder selected...");
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
         private async Task SelectResultFolder()
         {
             ResultPath = await Controller.SetResultFolderAsync();
-            ActiveText = "Result folder selected...";
+            await DisplayLogAsync("Result folder selected...");
             UpdateApplyButtonActivity();
         }
         [RelayCommand]
@@ -93,8 +97,35 @@ namespace AF_Augmentation.ViewModels
             ListOfEffects.Add(ControlSelector[sender].Invoke());
             MainWindow.Instance.OptionSelectorPopup.ToggleOpenClose();
         }
+        [RelayCommand]
+        private async Task DisplayLogAsync(string text) => await Task.Run(() => DisplayLog(text));
 
-        public void DeleteOption(int index)
+
+        #endregion
+        #region Public Methods
+
+        public async Task DeleteOptionAsync(int index) =>
+            await Task.Run(() => DeleteOption(index));
+
+        #endregion
+        #region Private Methods
+
+        private void DisplayLog(string text)
+        {
+            ActiveText = "";
+            foreach (var letter in text)
+            {
+                ActiveText += letter;
+                Thread.Sleep(5);
+            }
+        }
+        
+        private void UpdateApplyButtonActivity() => ApplyActivity = BaseFiles is null || AmbientFiles is null ||
+            resultPath is null || BaseFiles.Count == 0 ||
+            AmbientFiles.Count == 0 || resultPath == "" ?
+            false : true;
+
+        private void DeleteOption(int index)
         {
             ListOfEffects.RemoveAt(index);
 
@@ -104,22 +135,15 @@ namespace AF_Augmentation.ViewModels
         }
 
         #endregion
-        #region Private Methods
-
-        private void UpdateApplyButtonActivity() => ApplyActivity = BaseFiles is null || AmbientFiles is null ||
-            resultPath is null || BaseFiles.Count == 0 ||
-            AmbientFiles.Count == 0 || resultPath == "" ?
-            false : true;
-
-        #endregion
 
         public async Task RunApplicationAsync()
         {
-            ActiveText = "Mixing in progress...";
+
+            await DisplayLogAsync("Mixing in progress...");
             Shaded = true;
             await Controller.MixAsync();
             Shaded = false;
-            ActiveText = "Mixing is done!";
+            await DisplayLogAsync("Mixing is done!");
         }
     }
 }
