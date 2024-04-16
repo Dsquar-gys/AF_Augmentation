@@ -1,7 +1,8 @@
-﻿using AF_Augmentation.Models;
+﻿using System.Reactive;
+using AF_Augmentation.Models;
 using AF_Augmentation.Views;
-using CommunityToolkit.Mvvm.Input;
 using System.Threading;
+using ReactiveUI;
 
 namespace AF_Augmentation.ViewModels
 {
@@ -21,6 +22,7 @@ namespace AF_Augmentation.ViewModels
         }
 
         #endregion
+        
         #region Constructor
 
         public FileOverwriteApprovalViewModel(Thread thread)
@@ -34,12 +36,11 @@ namespace AF_Augmentation.ViewModels
         }
 
         #endregion
+        
         #region Relay Commands
 
-        [RelayCommand]
-        private void Positive() => Answer(true);
-        [RelayCommand]
-        private void Negative() => Answer(false);
+        public ReactiveCommand<Unit, Unit> Positive => ReactiveCommand.Create(() => Answer(true));
+        public ReactiveCommand<Unit, Unit> Negative => ReactiveCommand.Create(() => Answer(false));
 
         #endregion
     }

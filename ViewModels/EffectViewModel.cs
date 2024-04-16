@@ -1,44 +1,70 @@
-﻿using AF_Augmentation.Models;
+﻿using System.Reactive;
+using AF_Augmentation.Models;
 using AudioEffects;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace AF_Augmentation.ViewModels
 {
-    public abstract partial class EffectViewModel : ViewModelBase
+    public abstract class EffectViewModel : ViewModelBase
     {
         #region Abstract Members
 
-        public abstract IEffect CreateEffect();
+        protected abstract IEffect CreateEffect();
 
         #endregion
-        #region Observable Properties
+        
+        #region Private fields
+        
+        private bool _baseToggle;
+        private bool _ambientToggle;
+        private bool _active;
+        private EffectViewModel _instance;
+        private int _index;
+        
+        #endregion
+        
+        #region Properties
 
-        [ObservableProperty]
-        private bool baseToggle;
 
-        [ObservableProperty]
-        private bool ambientToggle;
-
-        [ObservableProperty]
-        private bool active;
-
-        [ObservableProperty]
-        private EffectViewModel instance;
-
-        [ObservableProperty]
-        private int index;
+        public bool BaseToggle
+        {
+            get => _baseToggle;
+            set => this.RaiseAndSetIfChanged(ref _baseToggle, value);
+        }
+        
+        public bool AmbientToggle
+        {
+            get => _ambientToggle;
+            set => this.RaiseAndSetIfChanged(ref _ambientToggle, value);
+        }
+        
+        public bool Active
+        {
+            get => _active;
+            set => this.RaiseAndSetIfChanged(ref _active, value);
+        }
+        
+        public EffectViewModel Instance
+        {
+            get => _instance;
+            set => this.RaiseAndSetIfChanged(ref _instance, value);
+        }
+        
+        public int Index
+        {
+            get => _index;
+            set => this.RaiseAndSetIfChanged(ref _index, value);
+        }
 
         #endregion
-        #region Relay Commands
+        
+        #region Commands
 
-        [RelayCommand]
-        private async Task DeleteOption(int index) =>
-            await WindowController.Instance.DeleteOptionAsync(index);
+        public ReactiveCommand<int, Unit> DeleteOptionCommand => ReactiveCommand.CreateFromTask<int>(async index =>
+            await WindowController.Instance.DeleteOptionAsync(index));
 
-        [RelayCommand]
-        private void CommitChange()
+        public ReactiveCommand<Unit, Unit> CommitChangeCommand => ReactiveCommand.Create(() =>
         {
             Active ^= true;
 
@@ -56,19 +82,20 @@ namespace AF_Augmentation.ViewModels
                     Controller.effectAmbient.Remove(command);
                 else Controller.effectBase.Remove(command);
             }
-        }
-
+        });
+        
         #endregion
+        
         #region Constructor
 
-        public EffectViewModel()
+        protected EffectViewModel()
         {
             var controlsAmount = MainWindow.Instance.OptionsGrid.ItemCount;
-            Index = controlsAmount > 0 ? controlsAmount : 0;
-            Instance = this;
-            Active = true;
-            BaseToggle = false;
-            AmbientToggle = true;
+            _index = controlsAmount > 0 ? controlsAmount : 0;
+            _instance = this;
+            _active = true;
+            _baseToggle = false;
+            _ambientToggle = true;
         }
 
         #endregion

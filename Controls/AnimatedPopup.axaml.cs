@@ -3,13 +3,14 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Reactive;
 using System.Threading;
+using ReactiveUI;
 
 namespace AF_Augmentation.Controls;
 
-public partial class AnimatedPopup : ContentControl
+public class AnimatedPopup : ContentControl
 {
     #region Private Members
 
@@ -114,7 +115,6 @@ public partial class AnimatedPopup : ContentControl
 
     #region Public Commands
 
-    [RelayCommand]
     public void ToggleOpenClose()
     {
         Open ^= true;
@@ -122,6 +122,8 @@ public partial class AnimatedPopup : ContentControl
         // Update animation
         UpdateAnimation();
     }
+
+    public ReactiveCommand<Unit, Unit> ToggleOpenCloseCommand => ReactiveCommand.Create(ToggleOpenClose);
 
     #endregion
 

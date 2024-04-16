@@ -1,20 +1,22 @@
 ﻿using AudioEffects;
 using AudioEffects.Effects;
-using CommunityToolkit.Mvvm.ComponentModel;
+using ReactiveUI;
 
 namespace AF_Augmentation.ViewModels
 {
     public partial class VolumeControlViewModel : EffectViewModel
     {
+        private float _multiplyBy;
+
+        public float MultiplyBy
+        {
+            get => _multiplyBy;
+            set => this.RaiseAndSetIfChanged(ref _multiplyBy, value);
+        }
+        
         #region Override Members
 
-        public override IEffect CreateEffect() => new VolumeMultiply(MultiplyBy);
-
-        #endregion
-        #region Internal Parameters
-
-        [ObservableProperty]
-        private float multiplyBy = 0;
+        protected override IEffect CreateEffect() => new VolumeMultiply(MultiplyBy);
 
         #endregion
     }

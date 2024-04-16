@@ -1,38 +1,59 @@
 ﻿using AF_Augmentation.Controls;
 using AF_Augmentation.Models;
-using Avalonia.Input;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace AF_Augmentation.ViewModels
 {
-    public partial class WindowController : ObservableObject
+    public partial class WindowController : ReactiveObject
     {
-        #region Observable Properties
-
-        [ObservableProperty]
-        private ObservableCollection<GridElementControl> baseFiles = new();
-        [ObservableProperty]
-        private ObservableCollection<GridElementControl> ambientFiles = new();
-        [ObservableProperty]
-        private string? resultPath = "";
-        [ObservableProperty]
-        private bool shaded = false;
-        [ObservableProperty]
-        private string activeText = "";
-        [ObservableProperty]
-        private bool applyActivity = false;
+        #region Private fields
+        
+        private string? _resultPath = "";
+        private bool _shaded;
+        private string _activeText = "";
+        private bool _applyActivity;
 
         #endregion
+        
+        #region Properties
+        
+        public ObservableCollection<GridElementControl> BaseFiles { get; } = new();
+        public ObservableCollection<GridElementControl> AmbientFiles { get; } = new();
+
+        public string? ResultPath
+        {
+            get => _resultPath;
+            set => this.RaiseAndSetIfChanged(ref _resultPath, value);
+        }
+        
+        public bool Shaded
+        {
+            get => _shaded;
+            set => this.RaiseAndSetIfChanged(ref _shaded, value);
+        }
+        
+        public string ActiveText
+        {
+            get => _activeText;
+            set => this.RaiseAndSetIfChanged(ref _activeText, value);
+        }
+        
+        public bool ApplyActivity
+        {
+            get => _applyActivity;
+            set => this.RaiseAndSetIfChanged(ref _applyActivity, value);
+        }
+        
+        #endregion
+        
         #region Window Controller Properties
 
         public static WindowController? Instance { get; set; }
@@ -40,12 +61,13 @@ namespace AF_Augmentation.ViewModels
         private ObservableCollection<EffectViewModel> ListOfEffects { get; } = new();
 
         #endregion
+        
         #region Constructors
 
         static WindowController()
         {
-            Type parentType = typeof(EffectViewModel);
-            IEnumerable<Type> heirsList = Assembly.GetAssembly(parentType)
+            var parentType = typeof(EffectViewModel);
+            var heirsList = Assembly.GetAssembly(parentType)
                                                   .GetTypes()
                                                   .Where(type => type.IsSubclassOf(parentType));
 
@@ -58,10 +80,10 @@ namespace AF_Augmentation.ViewModels
         public WindowController() => Instance = this;
 
         #endregion
+        
         #region Relay Commands
 
-        [RelayCommand]
-        private async Task SelectBaseFolderAsync()
+        public ReactiveCommand<Unit, Unit> SelectBaseFolderAsync => ReactiveCommand.CreateFromTask(async () =>
         {
             Shaded = true;
             BaseFiles.Clear();
@@ -71,9 +93,9 @@ namespace AF_Augmentation.ViewModels
 
             await DisplayLogAsync("Base folder selected...");
             UpdateApplyButtonActivity();
-        }
-        [RelayCommand]
-        private async Task SelectAmbientFolderAsync()
+        });
+
+        public ReactiveCommand<Unit, Unit> SelectAmbientFolderAsync => ReactiveCommand.CreateFromTask(async () =>
         {
             Shaded = true;
             AmbientFiles.Clear();
@@ -83,31 +105,31 @@ namespace AF_Augmentation.ViewModels
 
             await DisplayLogAsync("Ambient folder selected...");
             UpdateApplyButtonActivity();
-        }
-        [RelayCommand]
-        private async Task SelectResultFolder()
+        });
+
+        public ReactiveCommand<Unit, Unit> SelectResultFolderAsync => ReactiveCommand.CreateFromTask(async () =>
         {
             ResultPath = await Controller.SetResultFolderAsync();
             await DisplayLogAsync("Result folder selected...");
             UpdateApplyButtonActivity();
-        }
-        [RelayCommand]
-        private void AddOption(ChooseEffectButton sender)
-        {
-            ListOfEffects.Add(ControlSelector[sender].Invoke());
-            MainWindow.Instance.OptionSelectorPopup.ToggleOpenClose();
-        }
-        [RelayCommand]
-        private async Task DisplayLogAsync(string text) => await Task.Run(() => DisplayLog(text));
+        });
 
-
+        public ReactiveCommand<ChooseEffectButton, Unit> AddOption => ReactiveCommand.Create<ChooseEffectButton>(
+            sender =>
+            {
+                ListOfEffects.Add(ControlSelector[sender].Invoke());
+                MainWindow.Instance.OptionSelectorPopup.ToggleOpenClose();
+            });
+        
         #endregion
+        
         #region Public Methods
 
         public async Task DeleteOptionAsync(int index) =>
             await Task.Run(() => DeleteOption(index));
 
         #endregion
+        
         #region Private Methods
 
         private void DisplayLog(string text)
@@ -116,13 +138,15 @@ namespace AF_Augmentation.ViewModels
             foreach (var letter in text)
             {
                 ActiveText += letter;
-                Thread.Sleep(5);
+                Thread.Sleep(2);
             }
         }
         
+        private async Task DisplayLogAsync(string text) => await Task.Run(() => DisplayLog(text));
+        
         private void UpdateApplyButtonActivity() => ApplyActivity = BaseFiles is null || AmbientFiles is null ||
-            resultPath is null || BaseFiles.Count == 0 ||
-            AmbientFiles.Count == 0 || resultPath == "" ?
+            ResultPath is null || BaseFiles.Count == 0 ||
+            AmbientFiles.Count == 0 || ResultPath == "" ?
             false : true;
 
         private void DeleteOption(int index)

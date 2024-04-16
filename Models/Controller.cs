@@ -46,15 +46,15 @@ namespace AF_Augmentation.Models
         #region Async Methods
 
         public static async Task<List<string>> SetBaseFolderAsync() =>
-            await Task.Run(() => SetBaseFolder());
+            await Task.Run(SetBaseFolder);
 
         public static async Task<List<string>> SetAmbientFolderAsync() =>
-            await Task.Run(() => SetAmbientFolder());
+            await Task.Run(SetAmbientFolder);
 
         public static async Task<string> SetResultFolderAsync() =>
-            await Task.Run(() => SetResultFolder());
+            await Task.Run(SetResultFolder);
 
-        public static async Task MixAsync() => await Task.Run(() => Mix());
+        public static async Task MixAsync() => await Task.Run(Mix);
 
         #endregion
         #region Private Methods
@@ -83,7 +83,7 @@ namespace AF_Augmentation.Models
         {
             string? result = new OpenFolderDialog().ShowAsync(MainWindow.Instance).Result;
             if (result is not null)
-                resultDirectory = result + '\\';
+                resultDirectory = result + '/';
             return resultDirectory;
         }
         private static void Mix()

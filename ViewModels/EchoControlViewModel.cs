@@ -1,15 +1,37 @@
 ﻿using AudioEffects;
 using AudioEffects.Effects;
-using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using ReactiveUI;
 
 namespace AF_Augmentation.ViewModels
 {
     public partial class EchoControlViewModel : EffectViewModel
     {
+        private string? _delay;
+        private double _decay;
+        private string? _repetitions;
+
+        public string? Delay
+        {
+            get => _delay;
+            set => this.RaiseAndSetIfChanged(ref _delay, value);
+        }
+        
+        public double Decay
+        {
+            get => _decay;
+            set => this.RaiseAndSetIfChanged(ref _decay, value);
+        }
+        
+        public string? Repetitions
+        {
+            get => _repetitions;
+            set => this.RaiseAndSetIfChanged(ref _repetitions, value);
+        }
+        
         #region Override Members
 
-        public override IEffect CreateEffect()
+        protected override IEffect CreateEffect()
         {
             double delayValue;
             int repetitionsValue;
@@ -27,18 +49,6 @@ namespace AF_Augmentation.ViewModels
 
             return new Echo(delayValue, Decay, repetitionsValue);
         }
-
-        #endregion
-        #region Internal Parameters
-
-        [ObservableProperty]
-        private string? delay;
-
-        [ObservableProperty]
-        private double decay;
-
-        [ObservableProperty]
-        private string? repetitions;
 
         #endregion
     }
