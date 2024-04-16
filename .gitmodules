@@ -1,3 +1,6 @@
 [submodule "OptionsHandler"]
 	path = OptionsHandler
 	url = "D:/C#/Projects/OptionsHandler"
+[submodule "AudioEffects"]
+	path = AudioEffects
+	url = https://github.com/Dsquar-gys/AudioEffects
